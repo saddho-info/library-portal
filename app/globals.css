@@ -1,26 +1,164 @@
 @import "tailwindcss";
 
+@custom-variant dark (&:where(.dark, .dark *));
+
+/* -------------------------------------------------------------------------- */
+/* PubTrack tokens — "Ink & Paper" B2B language                               */
+/* Light is the default (ops dashboards). Dark is opt-in via `.dark`.         */
+/* -------------------------------------------------------------------------- */
+
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --background: #f4f6f8;
+  --foreground: #0f172a;
+  --card: #ffffff;
+  --card-foreground: #0f172a;
+  --popover: #ffffff;
+  --popover-foreground: #0f172a;
+  --primary: #164e63;
+  --primary-foreground: #f0fdfa;
+  --secondary: #e8eef1;
+  --secondary-foreground: #164e63;
+  --muted: #eef2f6;
+  --muted-foreground: #64748b;
+  --accent: #e8eef1;
+  --accent-foreground: #164e63;
+  --destructive: #dc2626;
+  --destructive-foreground: #fef2f2;
+  --success: #15803d;
+  --success-foreground: #f0fdf4;
+  --warning: #b45309;
+  --warning-foreground: #fffbeb;
+  --info: #1d4ed8;
+  --info-foreground: #eff6ff;
+  --border: #e2e8f0;
+  --input: #e2e8f0;
+  --ring: #164e63;
+  --radius: 0.5rem;
+  --elev-card: 0 1px 2px rgb(15 23 42 / 0.05), 0 1px 1px rgb(15 23 42 / 0.04);
+  --elev-dialog: 0 16px 40px rgb(15 23 42 / 0.16);
+  --elev-toast: 0 8px 24px rgb(15 23 42 / 0.12);
+}
+
+.dark {
+  --background: #0b1220;
+  --foreground: #e8eef4;
+  --card: #121a2a;
+  --card-foreground: #e8eef4;
+  --popover: #121a2a;
+  --popover-foreground: #e8eef4;
+  --primary: #5eead4;
+  --primary-foreground: #042f2e;
+  --secondary: #1c2738;
+  --secondary-foreground: #99f6e4;
+  --muted: #1c2738;
+  --muted-foreground: #94a3b8;
+  --accent: #1c2738;
+  --accent-foreground: #99f6e4;
+  --destructive: #f87171;
+  --destructive-foreground: #450a0a;
+  --success: #4ade80;
+  --success-foreground: #052e16;
+  --warning: #fbbf24;
+  --warning-foreground: #451a03;
+  --info: #60a5fa;
+  --info-foreground: #172554;
+  --border: #243044;
+  --input: #243044;
+  --ring: #5eead4;
+  --elev-card: 0 1px 2px rgb(0 0 0 / 0.35);
+  --elev-dialog: 0 16px 40px rgb(0 0 0 / 0.5);
+  --elev-toast: 0 8px 24px rgb(0 0 0 / 0.4);
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-success: var(--success);
+  --color-success-foreground: var(--success-foreground);
+  --color-warning: var(--warning);
+  --color-warning-foreground: var(--warning-foreground);
+  --color-info: var(--info);
+  --color-info-foreground: var(--info-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+
+  /* Ink scale — brand accents, charts, density chrome */
+  --color-ink-50: #ecfeff;
+  --color-ink-100: #cffafe;
+  --color-ink-200: #a5f3fc;
+  --color-ink-300: #67e8f9;
+  --color-ink-400: #22d3ee;
+  --color-ink-500: #06b6d4;
+  --color-ink-600: #0891b2;
+  --color-ink-700: #0e7490;
+  --color-ink-800: #155e75;
+  --color-ink-900: #164e63;
+  --color-ink-950: #083344;
+
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
+
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+  --radius-2xl: calc(var(--radius) + 8px);
+
+  --shadow-card: var(--elev-card);
+  --shadow-dialog: var(--elev-dialog);
+  --shadow-toast: var(--elev-toast);
+
+  /* B2B type scale: 14px body, tight but readable */
+  --text-xs: 0.75rem;
+  --text-xs--line-height: 1rem;
+  --text-sm: 0.875rem;
+  --text-sm--line-height: 1.25rem;
+  --text-base: 0.875rem;
+  --text-base--line-height: 1.375rem;
+  --text-lg: 1rem;
+  --text-lg--line-height: 1.5rem;
+  --text-xl: 1.125rem;
+  --text-xl--line-height: 1.625rem;
+  --text-2xl: 1.375rem;
+  --text-2xl--line-height: 1.75rem;
+  --text-3xl: 1.75rem;
+  --text-3xl--line-height: 2.125rem;
+
+  --spacing-4_5: 1.125rem;
+  --spacing-13: 3.25rem;
+  --spacing-15: 3.75rem;
+  --spacing-18: 4.5rem;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+@layer base {
+  * {
+    @apply border-border;
   }
-}
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  html {
+    @apply h-full;
+  }
+
+  body {
+    @apply min-h-full bg-background font-sans text-sm text-foreground antialiased;
+  }
+
+  :focus-visible {
+    @apply outline-none;
+  }
 }
