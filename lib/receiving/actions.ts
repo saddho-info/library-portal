@@ -74,5 +74,5 @@ export async function confirmReceiptAction(
   revalidatePath("/receiving");
   revalidatePath("/inventory");
   revalidatePath(`/receiving/${distributionId}`);
-  redirect(`/receiving/receipts/${created.id}`);
+  redirect(`/receiving/receipts/${created.id}?notice=receipt_confirmed`);
 }

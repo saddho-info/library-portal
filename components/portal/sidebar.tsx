@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import type { RefObject } from "react";
 import { SignOutButton } from "@/components/auth/sign-out-button";
 import { CloseIcon, NavIcon } from "@/components/portal/icons";
 import { formatRole, userInitials } from "@/lib/auth/display";
@@ -13,22 +14,26 @@ export function Sidebar({
   user,
   open,
   onClose,
+  closeButtonRef,
 }: {
   user: PublicUser;
   open: boolean;
   onClose: () => void;
+  closeButtonRef?: RefObject<HTMLButtonElement | null>;
 }) {
   const pathname = usePathname();
 
   return (
     <>
-      <div
+      <button
+        type="button"
         className={cn(
           "fixed inset-0 z-40 bg-foreground/20 transition-opacity lg:hidden",
           open ? "opacity-100" : "pointer-events-none opacity-0",
         )}
         onClick={onClose}
-        aria-hidden="true"
+        aria-label="Close navigation"
+        tabIndex={open ? 0 : -1}
       />
       <aside
         id="portal-sidebar"
@@ -51,6 +56,7 @@ export function Sidebar({
             </span>
           </Link>
           <button
+            ref={closeButtonRef}
             type="button"
             className="rounded-md p-1.5 text-muted-foreground hover:bg-muted hover:text-foreground focus-visible:ring-2 focus-visible:ring-ring lg:hidden"
             onClick={onClose}

@@ -12,6 +12,8 @@ import {
 } from "@/components/ui/card";
 import { buttonClassName } from "@/components/ui/button-styles";
 import { EmptyState } from "@/components/ui/empty-state";
+import { canManageLibrary } from "@/lib/auth/display";
+import { requireLibrarySession } from "@/lib/auth/session";
 import { getInventorySummary } from "@/lib/inventory/get-inventory";
 import { formatCount } from "@/lib/inventory/format";
 import { getReceiptSummary, getStockReceipts } from "@/lib/receiving/get-receiving";
@@ -22,7 +24,59 @@ export const metadata: Metadata = {
   title: "Reports",
 };
 
+const BASE_EXPORTS = [
+  {
+    kind: "sales.csv",
+    label: "Sales CSV",
+    description: "Counter sales with title, ISBN, and copy number.",
+  },
+  {
+    kind: "sales.pdf",
+    label: "Sales PDF",
+    description: "Printable sales summary.",
+  },
+  {
+    kind: "inventory.csv",
+    label: "Inventory CSV",
+    description: "On-hand, in-transit, and sold counts by edition.",
+  },
+  {
+    kind: "inventory.pdf",
+    label: "Inventory PDF",
+    description: "Printable inventory rollup.",
+  },
+  {
+    kind: "receipts.csv",
+    label: "Receipts CSV",
+    description: "Inbound shipment receipts and discrepancies.",
+  },
+  {
+    kind: "receipts.pdf",
+    label: "Receipts PDF",
+    description: "Printable receiving activity.",
+  },
+] as const;
+
+const AUDIT_EXPORTS = [
+  {
+    kind: "audit-logs.csv",
+    label: "Audit CSV",
+    description: "Mutating actions by library staff.",
+  },
+  {
+    kind: "audit-logs.pdf",
+    label: "Audit PDF",
+    description: "Printable audit trail excerpt.",
+  },
+] as const;
+
 export default async function ReportsPage() {
+  const user = await requireLibrarySession();
+  const showAudit = canManageLibrary(user.role);
+  const exports = showAudit
+    ? [...BASE_EXPORTS, ...AUDIT_EXPORTS]
+    : [...BASE_EXPORTS];
+
   const [inventory, salesSummary, receiptSummary, recentSales, recentReceipts] =
     await Promise.all([
       getInventorySummary(),
@@ -36,7 +90,7 @@ export default async function ReportsPage() {
     <div className="flex flex-col gap-6">
       <PageHeader
         title="Reports"
-        description="Snapshot of on-hand stock, counter sales, and receiving. CSV/PDF exports land in Phase 20."
+        description="Snapshot of on-hand stock, counter sales, and receiving — plus CSV/PDF exports."
       />
 
       <section
@@ -63,6 +117,29 @@ export default async function ReportsPage() {
           value={formatCount(receiptSummary.copiesReceived)}
           hint={`${formatCount(receiptSummary.confirmed)} receipts`}
         />
+      </section>
+
+      <section
+        aria-label="Export reports"
+        className="grid gap-3 sm:grid-cols-2 xl:grid-cols-4"
+      >
+        {exports.map((item) => (
+          <Card key={item.kind}>
+            <CardHeader>
+              <CardTitle>{item.label}</CardTitle>
+              <CardDescription>{item.description}</CardDescription>
+            </CardHeader>
+            <CardContent>
+              <Link
+                href={`/api/reports/${item.kind}`}
+                className={buttonClassName({ variant: "outline", size: "sm" })}
+                prefetch={false}
+              >
+                Download
+              </Link>
+            </CardContent>
+          </Card>
+        ))}
       </section>
 
       <section className="flex flex-col gap-3">

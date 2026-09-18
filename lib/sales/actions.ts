@@ -76,5 +76,5 @@ export async function createSaleAction(
 
   const created = (await response.json()) as { id: string };
   revalidateSales(created.id);
-  redirect(`/sales/${created.id}`);
+  redirect(`/sales/${created.id}?notice=sale_created`);
 }

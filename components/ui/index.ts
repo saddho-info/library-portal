@@ -59,3 +59,4 @@ export {
   type ToastItem,
   type ToastVariant,
 } from "@/components/ui/toast";
+export { FlashToast } from "@/components/ui/flash-toast";

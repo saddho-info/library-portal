@@ -5,17 +5,17 @@ import { ErrorState } from "@/components/ui/error-state";
 
 export default function PortalError({
   error,
-  retry,
+  reset,
 }: {
   error: Error & { digest?: string };
-  retry: () => void;
+  reset: () => void;
 }) {
   return (
     <ErrorState
       title="This section failed to load"
       message={error.message || "An unexpected error occurred. Try again."}
       action={
-        <Button variant="outline" onClick={() => retry()}>
+        <Button variant="outline" onClick={() => reset()}>
           Try again
         </Button>
       }

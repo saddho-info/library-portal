@@ -63,8 +63,9 @@ export const NAV_GROUPS: NavGroup[] = [
       {
         href: "/reports",
         label: "Reports",
-        description: "On-hand stock, sales totals, and receiving activity.",
-        phase: "Phase 12",
+        description:
+          "On-hand stock, sales totals, receiving activity, and CSV/PDF exports.",
+        phase: "Phase 20",
         icon: "reports",
       },
     ],
