@@ -65,9 +65,29 @@ const dotClass: Record<Tone, string> = {
 };
 
 export type StatusPillProps = Omit<ComponentProps<"span">, "children"> & {
-  status: StatusValue;
+  status: StatusValue | string | null | undefined;
   label?: string;
 };
+
+function getStatusMeta(status: unknown): { label: string; tone: Tone } {
+  const normalized = typeof status === "string" ? status.trim() : "";
+  const known = STATUS_META[normalized as StatusValue];
+  if (known) {
+    return known;
+  }
+
+  const fallbackLabel = normalized
+    .toLowerCase()
+    .split("_")
+    .filter(Boolean)
+    .map((part) => part[0]?.toUpperCase() + part.slice(1))
+    .join(" ");
+
+  return {
+    label: fallbackLabel || "Unknown",
+    tone: "neutral",
+  };
+}
 
 export function StatusPill({
   status,
@@ -75,7 +95,7 @@ export function StatusPill({
   className,
   ...props
 }: StatusPillProps) {
-  const meta = STATUS_META[status];
+  const meta = getStatusMeta(status);
 
   return (
     <span
@@ -95,6 +115,8 @@ export function StatusPill({
   );
 }
 
-export function getStatusLabel(status: StatusValue): string {
-  return STATUS_META[status].label;
+export function getStatusLabel(
+  status: StatusValue | string | null | undefined,
+): string {
+  return getStatusMeta(status).label;
 }

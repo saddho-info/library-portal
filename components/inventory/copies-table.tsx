@@ -22,8 +22,8 @@ export function CopiesTable({ copies }: { copies: InventoryCopy[] }) {
         </TableRow>
       </TableHeader>
       <TableBody>
-        {copies.map((copy) => (
-          <TableRow key={copy.id}>
+        {copies.map((copy, index) => (
+          <TableRow key={copy.id || `copy-${index}`}>
             <TableCell>
               <Link
                 href={`/inventory/copies/${copy.id}`}
