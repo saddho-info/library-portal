@@ -1,11 +1,11 @@
 "use client";
 
-import { useActionState } from "react";
+import { useActionState, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { createSaleAction } from "@/lib/sales/actions";
-import { dollarsFromCents } from "@/lib/sales/format";
+import { dollarsFromCents, type SaleDiscountType } from "@/lib/sales/format";
 import type { FormState } from "@/lib/sales/types";
 
 const initialState: FormState = {};
@@ -27,6 +27,8 @@ export function SaleForm({
     createSaleAction,
     initialState,
   );
+  const [discountType, setDiscountType] = useState<SaleDiscountType>("amount");
+  const isAmount = discountType === "amount";
 
   return (
     <form action={formAction} className="flex flex-col gap-4">
@@ -51,6 +53,10 @@ export function SaleForm({
         </div>
       ) : null}
 
+      {defaultPriceCents !== undefined ? (
+        <input type="hidden" name="listPriceCents" value={defaultPriceCents} />
+      ) : null}
+
       <Input
         name="unitPrice"
         label={`Unit price (${defaultCurrency})`}
@@ -61,6 +67,57 @@ export function SaleForm({
             : ""
         }
         error={state.fieldErrors?.unitPrice}
+        inputMode="decimal"
+      />
+
+      <fieldset className="flex flex-col gap-2">
+        <legend className="text-sm font-medium text-foreground">
+          Discount type
+        </legend>
+        <label className="flex items-start gap-2 text-sm">
+          <input
+            type="radio"
+            name="discountType"
+            value="amount"
+            checked={discountType === "amount"}
+            onChange={() => setDiscountType("amount")}
+            className="mt-1"
+          />
+          <span>
+            <span className="font-medium">Amount</span>
+            <span className="block text-xs text-muted-foreground">
+              Plain discount in {defaultCurrency}
+            </span>
+          </span>
+        </label>
+        <label className="flex items-start gap-2 text-sm">
+          <input
+            type="radio"
+            name="discountType"
+            value="percent"
+            checked={discountType === "percent"}
+            onChange={() => setDiscountType("percent")}
+            className="mt-1"
+          />
+          <span>
+            <span className="font-medium">Percentage</span>
+            <span className="block text-xs text-muted-foreground">
+              Discount as a percent of the price
+            </span>
+          </span>
+        </label>
+      </fieldset>
+
+      <Input
+        name="discount"
+        label={isAmount ? "Discount amount" : "Discount percentage"}
+        placeholder={isAmount ? "0.00" : "0"}
+        hint={
+          isAmount
+            ? "Amount taken off the unit price. Leave blank for no discount."
+            : "Percent taken off the unit price. Leave blank for no discount."
+        }
+        error={state.fieldErrors?.discount}
         inputMode="decimal"
       />
 
