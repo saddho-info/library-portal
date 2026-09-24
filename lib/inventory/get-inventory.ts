@@ -40,6 +40,7 @@ export async function getInventory(query: {
   search?: string;
   lowStock?: boolean;
   editionId?: string;
+  publisherId?: string;
 } = {}): Promise<Paginated<InventoryRollup>> {
   const qs = searchParamsFrom({
     page: query.page ?? 1,
@@ -47,6 +48,7 @@ export async function getInventory(query: {
     search: query.search,
     lowStock: query.lowStock,
     editionId: query.editionId,
+    publisherId: query.publisherId,
   });
   const response = await apiServerFetch(`/api/v1/inventory?${qs}`);
   const body = await readJson<Paginated<InventoryRollup>>(
@@ -59,8 +61,13 @@ export async function getInventory(query: {
   return body;
 }
 
-export async function getInventorySummary(): Promise<InventorySummary> {
-  const response = await apiServerFetch("/api/v1/inventory/summary");
+export async function getInventorySummary(query: {
+  publisherId?: string;
+} = {}): Promise<InventorySummary> {
+  const qs = searchParamsFrom({ publisherId: query.publisherId });
+  const response = await apiServerFetch(
+    qs ? `/api/v1/inventory/summary?${qs}` : "/api/v1/inventory/summary",
+  );
   return readJson<InventorySummary>(response, "Inventory summary not found.");
 }
 
@@ -101,12 +108,14 @@ export async function getMovements(query: {
   limit?: number;
   editionId?: string;
   copyId?: string;
+  type?: string;
 } = {}): Promise<Paginated<InventoryMovement>> {
   const qs = searchParamsFrom({
     page: query.page ?? 1,
     limit: query.limit ?? 10,
     editionId: query.editionId,
     copyId: query.copyId,
+    type: query.type,
   });
   const response = await apiServerFetch(`/api/v1/inventory/movements?${qs}`);
   const body = await readJson<Paginated<InventoryMovement>>(

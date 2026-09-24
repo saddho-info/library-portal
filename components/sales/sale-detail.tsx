@@ -27,6 +27,12 @@ import {
 import type { SaleDetail } from "@/lib/sales/types";
 
 export function SaleDetailView({ sale }: { sale: SaleDetail }) {
+  const listTotalCents = sale.items.reduce(
+    (sum, item) => sum + item.edition.listPriceCents * item.quantity,
+    0,
+  );
+  const discountCents = Math.max(0, listTotalCents - sale.totalCents);
+
   return (
     <div className="flex flex-col gap-6">
       <PageHeader
@@ -59,6 +65,12 @@ export function SaleDetailView({ sale }: { sale: SaleDetail }) {
             label="Total"
             value={formatMoney(sale.totalCents, sale.currency)}
           />
+          {discountCents > 0 ? (
+            <Field
+              label="Discount"
+              value={formatMoney(discountCents, sale.currency)}
+            />
+          ) : null}
           <Field
             label="Recorded by"
             value={`${sale.actor.firstName} ${sale.actor.lastName}`}

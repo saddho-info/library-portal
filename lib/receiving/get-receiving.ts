@@ -71,12 +71,16 @@ export async function getStockReceipts(query: {
   limit?: number;
   search?: string;
   distributionId?: string;
+  publisherId?: string;
+  status?: string;
 } = {}): Promise<Paginated<StockReceipt>> {
   const qs = searchParamsFrom({
     page: query.page ?? 1,
     limit: query.limit ?? 20,
     search: query.search,
     distributionId: query.distributionId,
+    publisherId: query.publisherId,
+    status: query.status,
   });
   const response = await apiServerFetch(`/api/v1/stock-receipts?${qs}`);
   const body = await readJson<Paginated<StockReceipt>>(

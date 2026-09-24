@@ -1,5 +1,6 @@
 export type NavIconName =
   | "receiving"
+  | "publishers"
   | "inventory"
   | "sales"
   | "returns"
@@ -32,6 +33,14 @@ export const NAV_GROUPS: NavGroup[] = [
           "Review inbound shipments, verify copies, and confirm stock onto shelves.",
         phase: "Phase 12",
         icon: "receiving",
+      },
+      {
+        href: "/publishers",
+        label: "Publishers",
+        description:
+          "Stock and sales for publishers cleared to distribute to this library.",
+        phase: "Phase 7",
+        icon: "publishers",
       },
       {
         href: "/inventory",

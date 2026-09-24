@@ -60,10 +60,10 @@ export default async function LibraryCopyDetailPage({
           <div className="flex flex-wrap gap-2">
             {copy.status === "IN_STOCK_LIBRARY" ? (
               <Link
-                href={`/sales/new?copyId=${copy.id}`}
+                href={`/sales/new?editionId=${copy.editionId}`}
                 className={buttonClassName()}
               >
-                Sell copy
+                Sell title
               </Link>
             ) : null}
             <Link
