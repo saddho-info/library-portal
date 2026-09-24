@@ -74,8 +74,8 @@ export function TitleSaleForm({
   if (editions.length === 0) {
     return (
       <p className="text-sm text-muted-foreground">
-        No on-hand titles are available to sell by quantity. Receive stock or
-        sell a single copy with a QR token instead.
+        No on-hand titles are available to sell. Receive stock, look up another
+        ISBN or title, or sell a single copy with a QR token.
       </p>
     );
   }
