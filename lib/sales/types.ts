@@ -87,6 +87,7 @@ export type SaleListQuery = {
   limit?: number;
   search?: string;
   editionId?: string;
+  publisherId?: string;
 };
 
 export type FormState = {

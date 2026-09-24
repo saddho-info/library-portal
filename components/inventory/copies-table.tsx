@@ -8,7 +8,11 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { formatCopyNumber } from "@/lib/inventory/format";
+import {
+  formatBookFormat,
+  formatCopyNumber,
+  formatIsbn13,
+} from "@/lib/inventory/format";
 import type { InventoryCopy } from "@/lib/inventory/types";
 
 export function CopiesTable({ copies }: { copies: InventoryCopy[] }) {
@@ -16,9 +20,11 @@ export function CopiesTable({ copies }: { copies: InventoryCopy[] }) {
     <Table>
       <TableHeader>
         <TableRow>
+          <TableHead>Title</TableHead>
           <TableHead>Copy</TableHead>
           <TableHead>Status</TableHead>
-          <TableHead>QR token</TableHead>
+          <TableHead>Library</TableHead>
+          <TableHead>ISBN</TableHead>
         </TableRow>
       </TableHeader>
       <TableBody>
@@ -29,14 +35,29 @@ export function CopiesTable({ copies }: { copies: InventoryCopy[] }) {
                 href={`/inventory/copies/${copy.id}`}
                 className="font-medium text-foreground hover:text-primary hover:underline"
               >
+                {copy.edition.book.title}
+              </Link>
+              <p className="text-xs text-muted-foreground">
+                {formatBookFormat(copy.edition.format)}
+                {copy.edition.title ? ` · ${copy.edition.title}` : ""}
+              </p>
+            </TableCell>
+            <TableCell className="tabular-nums">
+              <Link
+                href={`/inventory/copies/${copy.id}`}
+                className="hover:text-primary hover:underline"
+              >
                 {formatCopyNumber(copy.copyNumber)}
               </Link>
             </TableCell>
             <TableCell>
               <StatusPill status={copy.status} />
             </TableCell>
-            <TableCell className="max-w-[12rem] truncate font-mono text-xs text-muted-foreground">
-              {copy.qrToken ?? "—"}
+            <TableCell className="text-muted-foreground">
+              {copy.library?.name ?? "—"}
+            </TableCell>
+            <TableCell className="font-mono text-xs text-muted-foreground">
+              {formatIsbn13(copy.edition.isbn)}
             </TableCell>
           </TableRow>
         ))}

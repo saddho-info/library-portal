@@ -27,6 +27,16 @@ export function ReceivingIcon(props: IconProps) {
   );
 }
 
+export function PublishersIcon(props: IconProps) {
+  return (
+    <Svg {...props}>
+      <path d="M4 19V5a2 2 0 012-2h3v18H6a2 2 0 01-2-2z" />
+      <path d="M9 3h9a2 2 0 012 2v12a2 2 0 01-2 2H9" />
+      <path d="M13 7h5M13 11h5" />
+    </Svg>
+  );
+}
+
 export function InventoryIcon(props: IconProps) {
   return (
     <Svg {...props}>
@@ -89,6 +99,7 @@ export function CloseIcon(props: IconProps) {
 
 const ICONS: Record<NavIconName, (props: IconProps) => ReactElement> = {
   receiving: ReceivingIcon,
+  publishers: PublishersIcon,
   inventory: InventoryIcon,
   sales: SalesIcon,
   returns: ReturnsIcon,

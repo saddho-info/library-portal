@@ -18,6 +18,9 @@ function searchParamsFrom(query: SaleListQuery): string {
   if (query.editionId) {
     params.set("editionId", query.editionId);
   }
+  if (query.publisherId) {
+    params.set("publisherId", query.publisherId);
+  }
   return params.toString();
 }
 

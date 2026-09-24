@@ -1,0 +1,121 @@
+import Link from "next/link";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+import { formatCount } from "@/lib/inventory/format";
+import { formatMoney } from "@/lib/sales/format";
+import type {
+  PaginationMeta,
+  Publisher,
+  PublisherLibraryStats,
+} from "@/lib/publishers/types";
+
+const EMPTY_STATS: PublisherLibraryStats = {
+  publisherId: "",
+  onHand: 0,
+  stored: 0,
+  salesTotalCents: 0,
+  saleCount: 0,
+};
+
+export function PublishersTable({
+  publishers,
+  statsById,
+}: {
+  publishers: Publisher[];
+  statsById: Map<string, PublisherLibraryStats>;
+}) {
+  return (
+    <Table>
+      <TableHeader>
+        <TableRow>
+          <TableHead>Publisher</TableHead>
+          <TableHead className="text-right">On hand</TableHead>
+          <TableHead className="text-right">Stored</TableHead>
+          <TableHead className="text-right">Sales</TableHead>
+        </TableRow>
+      </TableHeader>
+      <TableBody>
+        {publishers.map((row) => {
+          const stats = statsById.get(row.id) ?? {
+            ...EMPTY_STATS,
+            publisherId: row.id,
+          };
+          return (
+            <TableRow key={row.id}>
+              <TableCell>
+                <Link
+                  href={`/inventory/publishers/${row.id}`}
+                  className="font-medium text-foreground hover:text-primary hover:underline"
+                >
+                  {row.name}
+                </Link>
+                <p className="text-xs text-muted-foreground">{row.slug}</p>
+              </TableCell>
+              <TableCell className="text-right tabular-nums">
+                {formatCount(stats.onHand)}
+              </TableCell>
+              <TableCell className="text-right tabular-nums">
+                {formatCount(stats.stored)}
+              </TableCell>
+              <TableCell className="text-right tabular-nums">
+                {formatMoney(stats.salesTotalCents)}
+              </TableCell>
+            </TableRow>
+          );
+        })}
+      </TableBody>
+    </Table>
+  );
+}
+
+export function PublishersPagination({
+  meta,
+  query,
+}: {
+  meta: PaginationMeta;
+  query: { search: string };
+}) {
+  if (meta.totalPages <= 1) {
+    return null;
+  }
+
+  function href(page: number) {
+    const params = new URLSearchParams();
+    if (query.search) params.set("search", query.search);
+    params.set("page", String(page));
+    return `/publishers?${params.toString()}`;
+  }
+
+  return (
+    <nav
+      className="flex items-center justify-between text-sm text-muted-foreground"
+      aria-label="Publisher pages"
+    >
+      <p>
+        Page {meta.page} of {meta.totalPages} · {meta.total} publishers
+      </p>
+      <div className="flex gap-2">
+        {meta.page > 1 ? (
+          <Link href={href(meta.page - 1)} className="hover:text-foreground">
+            Previous
+          </Link>
+        ) : (
+          <span className="opacity-40">Previous</span>
+        )}
+        {meta.page < meta.totalPages ? (
+          <Link href={href(meta.page + 1)} className="hover:text-foreground">
+            Next
+          </Link>
+        ) : (
+          <span className="opacity-40">Next</span>
+        )}
+      </div>
+    </nav>
+  );
+}

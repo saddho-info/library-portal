@@ -64,9 +64,11 @@ export function InventoryTable({ rows }: { rows: InventoryRollup[] }) {
 export function InventoryPagination({
   meta,
   query,
+  basePath = "/inventory",
 }: {
   meta: PaginationMeta;
   query: { search: string };
+  basePath?: string;
 }) {
   if (meta.totalPages <= 1) {
     return null;
@@ -76,7 +78,7 @@ export function InventoryPagination({
     const params = new URLSearchParams();
     if (query.search) params.set("search", query.search);
     params.set("page", String(page));
-    return `/inventory?${params.toString()}`;
+    return `${basePath}?${params.toString()}`;
   }
 
   return (
